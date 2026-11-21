@@ -108,7 +108,8 @@ def launch():
 
 def insert_synthetic_contact(name):
     """One made-up contact via the real contacts provider."""
-    r = adb("shell", "content", "insert", "--uri", "content://com.android.contacts/raw_contacts")
+    r = adb("shell", "content", "insert", "--uri", "content://com.android.contacts/raw_contacts",
+            "--bind", "account_type:s:local", "--bind", "account_name:s:simak-fixture")
     m = re.search(r"raw_contacts/(\d+)", r.stdout.decode())
     if not m:
         print("raw contact insert failed:", r.stdout, r.stderr)
