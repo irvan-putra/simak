@@ -144,6 +144,7 @@ insert_synthetic_contact("Kresna Wijaya")
 insert_synthetic_contact("Zain Fathoni")
 insert_synthetic_contact("Bagas Wastu")
 insert_synthetic_contact("Thomas Edwin Santosa")
+insert_synthetic_contact("Eko Kurniawan Khannedy")
 
 # --- 1. launcher icon pixels (family icon with the version badge)
 adb("shell", "input", "keyevent", "3")  # HOME
@@ -243,6 +244,9 @@ need("Building a Browser Engine with AI Is Harder Than You Think")
 need("\u2248 Kresna Wijaya")
 need("Lightning talks")
 need("\u2248 Bagas Wastu")
+# affiliation containing a ";" must stay one speaker, not fake names
+need("Keynote: title to be announced")
+need("\u2248 Eko Kurniawan Khannedy")
 shot("09b-day2-highlight")
 tap("Day 1", exact=True)
 need("\u2248 Thomas Edwin Santosa")

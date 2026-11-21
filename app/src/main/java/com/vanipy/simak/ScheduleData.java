@@ -91,13 +91,17 @@ public final class ScheduleData {
     };
 
     /**
-     * Individual speaker names inside a raw session speaker field: split on
-     * ";" for multi-speaker cards, org suffix in parentheses dropped.
+     * Individual speaker names inside a raw session speaker field. Org or
+     * role suffixes in parentheses are dropped first, then the remainder
+     * is split on ";" for multi-speaker cards. Stripping first keeps
+     * punctuation inside an affiliation like "(A; B)" from turning into
+     * fake speaker names.
      */
     public static java.util.List<String> speakerParts(String speakerField) {
+        String names = speakerField.replaceAll("\\([^()]*\\)", " ");
         java.util.List<String> out = new java.util.ArrayList<>();
-        for (String part : speakerField.split(";")) {
-            String name = part.replaceAll("\\(.*\\)", "").trim();
+        for (String part : names.split(";")) {
+            String name = part.trim();
             if (!name.isEmpty()) out.add(name);
         }
         return out;

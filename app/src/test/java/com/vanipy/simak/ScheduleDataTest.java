@@ -111,4 +111,19 @@ public class ScheduleDataTest {
             }
         }
     }
+
+    @Test
+    public void speakerPartsIgnorePunctuationInsideAffiliations() {
+        assertEquals(java.util.Arrays.asList("Eko Kurniawan Khannedy"),
+                ScheduleData.speakerParts(
+                        "Eko Kurniawan Khannedy (Technical Architect at Blibli; founder of Programmer Zaman Now)"));
+        assertEquals(java.util.Arrays.asList("Mansur Maturidi Arief"),
+                ScheduleData.speakerParts("Mansur Maturidi Arief (KFUPM; AI Verification and Validation Lab)"));
+    }
+
+    @Test
+    public void speakerPartsKeepEverySpeakerWhenAllCarryAffiliations() {
+        assertEquals(java.util.Arrays.asList("Anisa Rahma", "Budi Santoso"),
+                ScheduleData.speakerParts("Anisa Rahma (Lumbung); Budi Santoso (Sawit)"));
+    }
 }
