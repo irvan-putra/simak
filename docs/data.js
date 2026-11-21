@@ -219,8 +219,56 @@ window.SIMAK_DATA = {
           "id": "d2-1430",
           "start": "14:30",
           "end": "15:30",
-          "title": "Lightning talks: Task Done, Skill Not (Azzam Muhammadi Rizqun Karima); Everything Has an API If You're Willing to Prompt (Bagas Wastu); Mencegah Secrets Bocor ke LLM Agent dengan SOPS - preventing secrets from leaking to LLM agents with SOPS, our translation (Denny Aditya Pradipta); Untuk Internal: Bangun Tool Sendiri, Langganan, atau On-premise Opensource? - for internal use: build, subscribe, or on-premise open source, our translation (Irfan Kamil); What Good Mentorship Felt Like to Me as a Junior Engineer (luthfiyyah hanifah amari); Tokenomics of Testing (Salahuddin Muhammad Iqbal)",
-          "speaker": "Azzam Muhammadi Rizqun Karima; Bagas Wastu; Denny Aditya Pradipta; Irfan Kamil; luthfiyyah hanifah amari; Salahuddin Muhammad Iqbal",
+          "title": "Lightning talks - whole block (saved before the split)",
+          "speaker": "",
+          "kind": "legacy"
+        },
+        {
+          "id": "d2-1430-a",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Task Done, Skill Not",
+          "speaker": "Azzam Muhammadi Rizqun Karima",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-b",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Everything Has an API If You're Willing to Prompt",
+          "speaker": "Bagas Wastu",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-c",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Mencegah Secrets Bocor ke LLM Agent dengan SOPS - preventing secrets from leaking to LLM agents with SOPS, our translation",
+          "speaker": "Denny Aditya Pradipta",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-d",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Untuk Internal: Bangun Tool Sendiri, Langganan, atau On-premise Opensource? - for internal use: build, subscribe, or on-premise open source, our translation",
+          "speaker": "Irfan Kamil",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-e",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "What Good Mentorship Felt Like to Me as a Junior Engineer",
+          "speaker": "luthfiyyah hanifah amari",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-f",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Tokenomics of Testing",
+          "speaker": "Salahuddin Muhammad Iqbal",
           "kind": "lightning"
         },
         {

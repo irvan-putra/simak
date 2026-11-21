@@ -15,21 +15,126 @@
       "label": "Day 1",
       "date": "2026-11-21",
       "sessions": [
-        {"id": "d1-0800", "start": "08:00", "end": "09:00", "title": "Registration", "speaker": "", "kind": "break"},
-        {"id": "d1-0900", "start": "09:00", "end": "09:15", "title": "Opening", "speaker": "", "kind": "ceremony"},
-        {"id": "d1-0920", "start": "09:20", "end": "09:40", "title": "Introducing NEO App - deploying applications through MCP, Git or source code without manual server configuration", "speaker": "Utian Ayuba (VP of Consulting and Services)", "kind": "sponsor"},
-        {"id": "d1-0945", "start": "09:45", "end": "10:30", "title": "Keynote: Run your organization with agentic AI powered by local LLMs, enabling faster, smarter, and more secure workflows at scale", "speaker": "Muqorrobin Marufi Syihab / Robin (Nuwaira Academy, Evonic)", "kind": "keynote"},
-        {"id": "d1-1035", "start": "10:35", "end": "11:05", "title": "The System Worked. The Organization Didn't.", "speaker": "Iman Fattah (Alun)", "kind": "talk"},
-        {"id": "d1-1110", "start": "11:10", "end": "11:40", "title": "Before and After Agentic Coding in a Heavily Regulated Financial Industry: Did We Actually Get Faster?", "speaker": "Thomas Edwin Santosa (DKatalis)", "kind": "talk"},
-        {"id": "d1-1140", "start": "11:40", "end": "12:00", "title": "Your Agent is too fast", "speaker": "Mohammad Maftuqin Ibnin Tsalis (Head of Engineering, Midtrans)", "kind": "sponsor"},
-        {"id": "d1-1200", "start": "12:00", "end": "13:30", "title": "Lunch break", "speaker": "", "kind": "break"},
-        {"id": "d1-1330", "start": "13:30", "end": "14:15", "title": "Keynote: Inference Engineering: Innerworking of Fast LLM Serving", "speaker": "Mustafa Zaki Assagaf (Platform Engineer)", "kind": "keynote"},
-        {"id": "d1-1420", "start": "14:20", "end": "14:50", "title": "import zerotrust: Network Security as a Dependency, Not a Ticket", "speaker": "Affan Basalamah (CTO, Salamah Systems)", "kind": "talk"},
-        {"id": "d1-1455", "start": "14:55", "end": "15:25", "title": "From Air to Packets and Back: How Voice Travels Between Devices", "speaker": "Yoseph Bernandus (RevComm Inc)", "kind": "talk"},
-        {"id": "d1-1530", "start": "15:30", "end": "16:30", "title": "Coffee break", "speaker": "", "kind": "break"},
-        {"id": "d1-1630", "start": "16:30", "end": "17:00", "title": "From Chatbot to Analytics Agent: What Broke When LLMs Met Our Real BigQuery Data", "speaker": "Faiq Miftakhul Falakh (AssetFindr)", "kind": "talk"},
-        {"id": "d1-1705", "start": "17:05", "end": "18:05", "title": "Panel discussion", "speaker": "", "kind": "panel"},
-        {"id": "d1-1805", "start": "18:05", "end": "18:15", "title": "Closing", "speaker": "", "kind": "ceremony"}
+        {
+          "id": "d1-0800",
+          "start": "08:00",
+          "end": "09:00",
+          "title": "Registration",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d1-0900",
+          "start": "09:00",
+          "end": "09:15",
+          "title": "Opening",
+          "speaker": "",
+          "kind": "ceremony"
+        },
+        {
+          "id": "d1-0920",
+          "start": "09:20",
+          "end": "09:40",
+          "title": "Introducing NEO App - deploying applications through MCP, Git or source code without manual server configuration",
+          "speaker": "Utian Ayuba (VP of Consulting and Services)",
+          "kind": "sponsor"
+        },
+        {
+          "id": "d1-0945",
+          "start": "09:45",
+          "end": "10:30",
+          "title": "Keynote: Run your organization with agentic AI powered by local LLMs, enabling faster, smarter, and more secure workflows at scale",
+          "speaker": "Muqorrobin Marufi Syihab / Robin (Nuwaira Academy, Evonic)",
+          "kind": "keynote"
+        },
+        {
+          "id": "d1-1035",
+          "start": "10:35",
+          "end": "11:05",
+          "title": "The System Worked. The Organization Didn't.",
+          "speaker": "Iman Fattah (Alun)",
+          "kind": "talk"
+        },
+        {
+          "id": "d1-1110",
+          "start": "11:10",
+          "end": "11:40",
+          "title": "Before and After Agentic Coding in a Heavily Regulated Financial Industry: Did We Actually Get Faster?",
+          "speaker": "Thomas Edwin Santosa (DKatalis)",
+          "kind": "talk"
+        },
+        {
+          "id": "d1-1140",
+          "start": "11:40",
+          "end": "12:00",
+          "title": "Your Agent is too fast",
+          "speaker": "Mohammad Maftuqin Ibnin Tsalis (Head of Engineering, Midtrans)",
+          "kind": "sponsor"
+        },
+        {
+          "id": "d1-1200",
+          "start": "12:00",
+          "end": "13:30",
+          "title": "Lunch break",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d1-1330",
+          "start": "13:30",
+          "end": "14:15",
+          "title": "Keynote: Inference Engineering: Innerworking of Fast LLM Serving",
+          "speaker": "Mustafa Zaki Assagaf (Platform Engineer)",
+          "kind": "keynote"
+        },
+        {
+          "id": "d1-1420",
+          "start": "14:20",
+          "end": "14:50",
+          "title": "import zerotrust: Network Security as a Dependency, Not a Ticket",
+          "speaker": "Affan Basalamah (CTO, Salamah Systems)",
+          "kind": "talk"
+        },
+        {
+          "id": "d1-1455",
+          "start": "14:55",
+          "end": "15:25",
+          "title": "From Air to Packets and Back: How Voice Travels Between Devices",
+          "speaker": "Yoseph Bernandus (RevComm Inc)",
+          "kind": "talk"
+        },
+        {
+          "id": "d1-1530",
+          "start": "15:30",
+          "end": "16:30",
+          "title": "Coffee break",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d1-1630",
+          "start": "16:30",
+          "end": "17:00",
+          "title": "From Chatbot to Analytics Agent: What Broke When LLMs Met Our Real BigQuery Data",
+          "speaker": "Faiq Miftakhul Falakh (AssetFindr)",
+          "kind": "talk"
+        },
+        {
+          "id": "d1-1705",
+          "start": "17:05",
+          "end": "18:05",
+          "title": "Panel discussion",
+          "speaker": "",
+          "kind": "panel"
+        },
+        {
+          "id": "d1-1805",
+          "start": "18:05",
+          "end": "18:15",
+          "title": "Closing",
+          "speaker": "",
+          "kind": "ceremony"
+        }
       ]
     },
     {
@@ -37,19 +142,158 @@
       "label": "Day 2",
       "date": "2026-11-22",
       "sessions": [
-        {"id": "d2-0900", "start": "09:00", "end": "09:30", "title": "Registration", "speaker": "", "kind": "break"},
-        {"id": "d2-0930", "start": "09:30", "end": "09:40", "title": "Opening", "speaker": "", "kind": "ceremony"},
-        {"id": "d2-0940", "start": "09:40", "end": "10:00", "title": "Moving Fast Without Breaking the Bank: Our First 100 Days with AI Coding Assistants at BRI", "speaker": "Winny Ardhian Septiko (BRI)", "kind": "sponsor"},
-        {"id": "d2-1005", "start": "10:05", "end": "10:50", "title": "Keynote: Pesan Systems Engineering Modern dalam Membangun Purwarupa AI ke Sistem Produksi yang Aman, Teruji, dan Layak Dipercaya (our translation: modern systems-engineering lessons for turning AI prototypes into safe, tested, trustworthy production systems)", "speaker": "Mansur Maturidi Arief (KFUPM; AI Verification and Validation Lab)", "kind": "keynote"},
-        {"id": "d2-1055", "start": "10:55", "end": "11:25", "title": "(Human) Attention is All You Need", "speaker": "Zain Fathoni (BookThatApp)", "kind": "talk"},
-        {"id": "d2-1130", "start": "11:30", "end": "12:00", "title": "Front-End Job is Dying: What I Own as a Design Engineer", "speaker": "Theodorus Clarence (fireflies.ai)", "kind": "talk"},
-        {"id": "d2-1200", "start": "12:00", "end": "13:30", "title": "Lunch break", "speaker": "", "kind": "break"},
-        {"id": "d2-1330", "start": "13:30", "end": "13:50", "title": "Intermezzo: 3 Years of IDSW", "speaker": "", "kind": "intermezzo"},
-        {"id": "d2-1355", "start": "13:55", "end": "14:25", "title": "Building a Browser Engine with AI Is Harder Than You Think", "speaker": "Kresna Satya", "kind": "talk"},
-        {"id": "d2-1430", "start": "14:30", "end": "15:30", "title": "Lightning talks: Task Done, Skill Not (Azzam Muhammadi Rizqun Karima); Everything Has an API If You're Willing to Prompt (Bagas Wastu); Mencegah Secrets Bocor ke LLM Agent dengan SOPS - preventing secrets from leaking to LLM agents with SOPS, our translation (Denny Aditya Pradipta); Untuk Internal: Bangun Tool Sendiri, Langganan, atau On-premise Opensource? - for internal use: build, subscribe, or on-premise open source, our translation (Irfan Kamil); What Good Mentorship Felt Like to Me as a Junior Engineer (luthfiyyah hanifah amari); Tokenomics of Testing (Salahuddin Muhammad Iqbal)", "speaker": "Azzam Muhammadi Rizqun Karima; Bagas Wastu; Denny Aditya Pradipta; Irfan Kamil; luthfiyyah hanifah amari; Salahuddin Muhammad Iqbal", "kind": "lightning"},
-        {"id": "d2-1530", "start": "15:30", "end": "16:30", "title": "Coffee break", "speaker": "", "kind": "break"},
-        {"id": "d2-1630", "start": "16:30", "end": "17:15", "title": "Keynote: title to be announced", "speaker": "Eko Kurniawan Khannedy (Technical Architect at Blibli; founder of Programmer Zaman Now)", "kind": "keynote"},
-        {"id": "d2-1720", "start": "17:20", "end": "17:40", "title": "Closing", "speaker": "", "kind": "ceremony"}
+        {
+          "id": "d2-0900",
+          "start": "09:00",
+          "end": "09:30",
+          "title": "Registration",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d2-0930",
+          "start": "09:30",
+          "end": "09:40",
+          "title": "Opening",
+          "speaker": "",
+          "kind": "ceremony"
+        },
+        {
+          "id": "d2-0940",
+          "start": "09:40",
+          "end": "10:00",
+          "title": "Moving Fast Without Breaking the Bank: Our First 100 Days with AI Coding Assistants at BRI",
+          "speaker": "Winny Ardhian Septiko (BRI)",
+          "kind": "sponsor"
+        },
+        {
+          "id": "d2-1005",
+          "start": "10:05",
+          "end": "10:50",
+          "title": "Keynote: Pesan Systems Engineering Modern dalam Membangun Purwarupa AI ke Sistem Produksi yang Aman, Teruji, dan Layak Dipercaya (our translation: modern systems-engineering lessons for turning AI prototypes into safe, tested, trustworthy production systems)",
+          "speaker": "Mansur Maturidi Arief (KFUPM; AI Verification and Validation Lab)",
+          "kind": "keynote"
+        },
+        {
+          "id": "d2-1055",
+          "start": "10:55",
+          "end": "11:25",
+          "title": "(Human) Attention is All You Need",
+          "speaker": "Zain Fathoni (BookThatApp)",
+          "kind": "talk"
+        },
+        {
+          "id": "d2-1130",
+          "start": "11:30",
+          "end": "12:00",
+          "title": "Front-End Job is Dying: What I Own as a Design Engineer",
+          "speaker": "Theodorus Clarence (fireflies.ai)",
+          "kind": "talk"
+        },
+        {
+          "id": "d2-1200",
+          "start": "12:00",
+          "end": "13:30",
+          "title": "Lunch break",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d2-1330",
+          "start": "13:30",
+          "end": "13:50",
+          "title": "Intermezzo: 3 Years of IDSW",
+          "speaker": "",
+          "kind": "intermezzo"
+        },
+        {
+          "id": "d2-1355",
+          "start": "13:55",
+          "end": "14:25",
+          "title": "Building a Browser Engine with AI Is Harder Than You Think",
+          "speaker": "Kresna Satya",
+          "kind": "talk"
+        },
+        {
+          "id": "d2-1430",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Lightning talks - whole block (saved before the split)",
+          "speaker": "",
+          "kind": "legacy"
+        },
+        {
+          "id": "d2-1430-a",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Task Done, Skill Not",
+          "speaker": "Azzam Muhammadi Rizqun Karima",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-b",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Everything Has an API If You're Willing to Prompt",
+          "speaker": "Bagas Wastu",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-c",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Mencegah Secrets Bocor ke LLM Agent dengan SOPS - preventing secrets from leaking to LLM agents with SOPS, our translation",
+          "speaker": "Denny Aditya Pradipta",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-d",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Untuk Internal: Bangun Tool Sendiri, Langganan, atau On-premise Opensource? - for internal use: build, subscribe, or on-premise open source, our translation",
+          "speaker": "Irfan Kamil",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-e",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "What Good Mentorship Felt Like to Me as a Junior Engineer",
+          "speaker": "luthfiyyah hanifah amari",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1430-f",
+          "start": "14:30",
+          "end": "15:30",
+          "title": "Tokenomics of Testing",
+          "speaker": "Salahuddin Muhammad Iqbal",
+          "kind": "lightning"
+        },
+        {
+          "id": "d2-1530",
+          "start": "15:30",
+          "end": "16:30",
+          "title": "Coffee break",
+          "speaker": "",
+          "kind": "break"
+        },
+        {
+          "id": "d2-1630",
+          "start": "16:30",
+          "end": "17:15",
+          "title": "Keynote: title to be announced",
+          "speaker": "Eko Kurniawan Khannedy (Technical Architect at Blibli; founder of Programmer Zaman Now)",
+          "kind": "keynote"
+        },
+        {
+          "id": "d2-1720",
+          "start": "17:20",
+          "end": "17:40",
+          "title": "Closing",
+          "speaker": "",
+          "kind": "ceremony"
+        }
       ]
     }
   ],

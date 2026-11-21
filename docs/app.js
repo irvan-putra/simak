@@ -85,7 +85,11 @@
     label.style.cssText = 'color:var(--ink-soft);font-size:13px;margin:6px 4px;';
     label.textContent = day.label + ' · ' + day.date + ' (WIB)';
     content.appendChild(label);
-    day.sessions.forEach(function (s) { content.appendChild(sessionCard(s)); });
+    day.sessions.forEach(function (s) {
+      // a legacy card only appears while it still carries saved state
+      if (s.kind === 'legacy' && !star(s.id) && !note(s.id)) return;
+      content.appendChild(sessionCard(s));
+    });
   }
 
   function renderGuide() {

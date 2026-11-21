@@ -96,7 +96,17 @@ public class MainActivity extends Activity {
             contactMatches = Collections.emptyMap();
         }
         for (ScheduleData.Session s : ScheduleData.SESSIONS) {
-            if (s.day.equals(day)) content.addView(sessionCard(s));
+            if (!s.day.equals(day)) continue;
+            // A legacy card stands in for a card a past version replaced;
+            // it appears only while it still carries the user's saved
+            // state, so nothing they saved is silently dropped.
+            if ("legacy".equals(s.kind)
+                    && !Prefs.isStarred(this, s.id)
+                    && !Prefs.hasReminder(this, s.id)
+                    && Prefs.note(this, s.id).trim().isEmpty()) {
+                continue;
+            }
+            content.addView(sessionCard(s));
         }
         TextView foot = Ui.text(this, 12, Ui.INK_SOFT, Typeface.NORMAL);
         foot.setText("Agenda from " + ScheduleData.SOURCE + ", checked "
@@ -149,6 +159,15 @@ public class MainActivity extends Activity {
             TextView speaker = Ui.text(this, 13, Ui.INK_SOFT, Typeface.NORMAL);
             speaker.setText(s.speaker);
             card.addView(speaker);
+        }
+
+        if ("legacy".equals(s.kind)) {
+            TextView why = Ui.text(this, 12, Ui.INK_SOFT, Typeface.ITALIC);
+            why.setText("Your saved star, note or reminder from the whole block, "
+                    + "kept as-is when the talks split into their own cards. "
+                    + "This card stays while it carries anything of yours.");
+            Ui.pad(why, this, 0, 2, 0, 0);
+            card.addView(why);
         }
 
         if (contactMatch) {

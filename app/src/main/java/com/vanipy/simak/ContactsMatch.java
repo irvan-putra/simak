@@ -46,11 +46,16 @@ public final class ContactsMatch {
         }
         List<Hit> hits = new ArrayList<>();
         for (String speaker : ScheduleData.speakers()) {
+            List<Hit> own = new ArrayList<>();
             for (String contact : contacts) {
                 if (NameMatch.alike(speaker, contact)) {
-                    hits.add(new Hit(speaker, contact));
+                    own.add(new Hit(speaker, contact));
                 }
             }
+            // strongest hints first within each speaker, ties alphabetical;
+            // the speaker order itself stays agenda order
+            own.sort((a, b) -> NameMatch.compare(a.speaker, a.contact, b.contact));
+            hits.addAll(own);
         }
         return hits;
     }
@@ -76,16 +81,27 @@ public final class ContactsMatch {
         Map<String, List<String>> out = new LinkedHashMap<>();
         for (ScheduleData.Session s : ScheduleData.SESSIONS) {
             if (s.speaker.isEmpty()) continue;
-            List<String> names = new ArrayList<>();
+            Map<String, Integer> best = new LinkedHashMap<>();
             for (String part : ScheduleData.speakerParts(s.speaker)) {
                 List<String> hit = byPart.get(part);
-                if (hit != null) {
-                    for (String n : hit) {
-                        if (!names.contains(n)) names.add(n);
-                    }
+                if (hit == null) continue;
+                for (String n : hit) {
+                    int sc = NameMatch.score(part, n);
+                    Integer cur = best.get(n);
+                    if (cur == null || sc > cur) best.put(n, sc);
                 }
             }
-            if (!names.isEmpty()) out.put(s.speaker, names);
+            if (!best.isEmpty()) {
+                // strongest hint first on the card, ties alphabetical
+                List<Map.Entry<String, Integer>> ranked = new ArrayList<>(best.entrySet());
+                ranked.sort((a, b) -> {
+                    int d = Integer.compare(b.getValue(), a.getValue());
+                    return d != 0 ? d : a.getKey().compareToIgnoreCase(b.getKey());
+                });
+                List<String> names = new ArrayList<>();
+                for (Map.Entry<String, Integer> e : ranked) names.add(e.getKey());
+                out.put(s.speaker, names);
+            }
         }
         return out;
     }

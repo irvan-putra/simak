@@ -38,7 +38,7 @@ public class ScheduleDataTest {
             assertTrue(s.end.matches("\\d{2}:\\d{2}"));
             assertTrue(s.start.compareTo(s.end) < 0);
             String key = s.day + s.start;
-            assertTrue("sessions out of order at " + s.id, key.compareTo(prevKey) > 0);
+            assertTrue("sessions out of order at " + s.id, key.compareTo(prevKey) >= 0);
             prevKey = key;
         }
     }
@@ -125,5 +125,35 @@ public class ScheduleDataTest {
     public void speakerPartsKeepEverySpeakerWhenAllCarryAffiliations() {
         assertEquals(java.util.Arrays.asList("Anisa Rahma", "Budi Santoso"),
                 ScheduleData.speakerParts("Anisa Rahma (Lumbung); Budi Santoso (Sawit)"));
+    }
+
+    @Test
+    public void lightningBlockIsSplitIntoPerTalkCardsSharingTheWindow() {
+        java.util.List<ScheduleData.Session> lightning = new java.util.ArrayList<>();
+        for (ScheduleData.Session s : ScheduleData.SESSIONS) {
+            if ("lightning".equals(s.kind)) lightning.add(s);
+        }
+        assertTrue("expected several lightning cards", lightning.size() >= 2);
+        // the first card keeps the old combined card's id so existing
+        // stars, notes and reminders stay attached
+        assertEquals("d2-1430-a", lightning.get(0).id);
+        for (ScheduleData.Session s : lightning) {
+            assertEquals("14:30", s.start);
+            assertEquals("15:30", s.end);
+            assertFalse("one speaker per lightning card", s.speaker.contains(";"));
+        }
+    }
+
+    @Test
+    public void legacyWholeBlockEntryKeepsTheOldIdAndWindow() {
+        ScheduleData.Session legacy = null;
+        for (ScheduleData.Session s : ScheduleData.SESSIONS) {
+            if (s.id.equals("d2-1430")) legacy = s;
+        }
+        assertNotNull("the old combined card's id must keep resolving", legacy);
+        assertEquals("legacy", legacy.kind);
+        assertEquals("14:30", legacy.start);
+        assertEquals("15:30", legacy.end);
+        assertEquals("", legacy.speaker);
     }
 }

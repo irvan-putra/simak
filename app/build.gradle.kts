@@ -2,8 +2,8 @@ plugins {
     id("com.android.application")
 }
 
-val appVersionName = "0.2.1"
-val appVersionCode = 3
+val appVersionName = "0.3.0"
+val appVersionCode = 4
 
 base {
     archivesName.set("simak-v$appVersionName")

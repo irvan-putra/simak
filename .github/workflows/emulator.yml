@@ -13,6 +13,10 @@ on:
         description: "Release tag whose published APK to smoke test."
         required: true
         default: "v0.1.0"
+      base_tag:
+        description: "Optional older release to install first for upgrade-migration checks."
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -32,6 +36,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         env:
           RELEASE_TAG: ${{ inputs.release_tag }}
+          BASE_TAG: ${{ inputs.base_tag }}
           GH_TOKEN: ${{ github.token }}
         with:
           api-level: 34

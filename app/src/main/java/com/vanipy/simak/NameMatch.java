@@ -53,6 +53,59 @@ public final class NameMatch {
         return false;
     }
 
+    /**
+     * Higher = stronger hint, for display ordering only. What counts as a
+     * match is alike()'s call and is unchanged: every alike() pair scores
+     * above zero. Tiers: exact name first, then the same words in another
+     * order, then partial matches ranked by word overlap over both names
+     * plus spelling closeness (Levenshtein, normalized by length) - so a
+     * near-full-name match always beats one shared common word.
+     */
+    public static int score(String speaker, String contact) {
+        List<String> s = tokens(speaker);
+        List<String> c = tokens(contact);
+        if (s.isEmpty() || c.isEmpty()) return 0;
+        LinkedHashSet<String> shared = new LinkedHashSet<>(s);
+        shared.retainAll(c);
+        if (s.equals(c)) return 400 + s.size();
+        if (shared.size() == s.size() && shared.size() == c.size()) {
+            return 300 + s.size();  // same words, reordered
+        }
+        if (!alike(speaker, contact)) return 0;
+        String sj = join(s);
+        String cj = join(c);
+        double overlap = 2.0 * shared.size() / (s.size() + c.size());
+        double spelling = 1.0
+                - (double) levenshtein(sj, cj) / Math.max(sj.length(), cj.length());
+        return 100 + (int) Math.round(100 * (overlap + spelling));
+    }
+
+    /**
+     * Display order for hints about one speaker: strongest first, ties
+     * alphabetical by the contact name.
+     */
+    public static int compare(String speaker, String contactA, String contactB) {
+        int d = Integer.compare(score(speaker, contactB), score(speaker, contactA));
+        if (d != 0) return d;
+        return contactA.compareToIgnoreCase(contactB);
+    }
+
+    /** Edit distance between two normalized names, for the partial tier. */
+    static int levenshtein(String a, String b) {
+        int[] prev = new int[b.length() + 1];
+        for (int j = 0; j <= b.length(); j++) prev[j] = j;
+        for (int i = 1; i <= a.length(); i++) {
+            int[] cur = new int[b.length() + 1];
+            cur[0] = i;
+            for (int j = 1; j <= b.length(); j++) {
+                int cost = a.charAt(i - 1) == b.charAt(j - 1) ? 0 : 1;
+                cur[j] = Math.min(Math.min(cur[j - 1] + 1, prev[j] + 1), prev[j - 1] + cost);
+            }
+            prev = cur;
+        }
+        return prev[b.length()];
+    }
+
     private static String join(List<String> tokens) {
         StringBuilder sb = new StringBuilder();
         for (String t : tokens) {

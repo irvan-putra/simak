@@ -134,6 +134,46 @@ def perm_dialog_button(label_variants):
     return False
 
 
+# --- pre. legacy state migration (only when ci/run.sh installed a base
+# APK first): seed a note on the old combined lightning card, upgrade in
+# place (same signer, data preserved), and confirm the kept whole-block
+# card still carries the note with its legacy label.
+import glob
+base_apks = glob.glob("/tmp/base/simak-v*.apk")
+if base_apks:
+    launch()
+    tap("Day 2", exact=True)
+    need("Lightning talks:")
+    tap("Lightning talks:")
+    need("Your note for this session")
+    tap("Your note for this session")
+    adb("shell", "input", "text", "legacy%sblock%snote")
+    time.sleep(1)
+    need("legacy block note")
+    shot("00a-base-block-note")
+    adb("shell", "input", "keyevent", "4")  # dismiss the IME
+    time.sleep(1)
+    rel_apks = glob.glob("/tmp/rel/simak-v*.apk")
+    if not rel_apks:
+        print("release APK missing under /tmp/rel")
+        sys.exit(1)
+    r = adb("install", "-r", rel_apks[0])
+    print("upgrade install:", r.stdout.decode().strip())
+    if r.returncode:
+        print(r.stderr.decode())
+        sys.exit(1)
+    time.sleep(2)
+    launch()
+    tap("Day 2", exact=True)
+    need("whole block (saved before the split)")
+    tap("whole block (saved before the split)")
+    need("legacy block note")
+    need("kept as-is")
+    shot("00b-legacy-state-migrated")
+    adb("shell", "input", "keyevent", "4")
+    adb("shell", "am", "force-stop", PKG)  # fresh, collapsed list for step 1
+    time.sleep(1)
+
 # --- 0. synthetic fixture: one made-up contact sharing a long name token
 # with a Day 2 speaker ("kresna"), to prove fuzzy matching without any real
 # contact data.
@@ -143,6 +183,7 @@ def perm_dialog_button(label_variants):
 insert_synthetic_contact("Kresna Wijaya")
 insert_synthetic_contact("Zain Fathoni")
 insert_synthetic_contact("Bagas Wastu")
+insert_synthetic_contact("Bagas Wastu Junior")
 insert_synthetic_contact("Thomas Edwin Santosa")
 insert_synthetic_contact("Eko Kurniawan Khannedy")
 
@@ -234,16 +275,21 @@ need("not proof it is the same person")
 shot("09-contacts-match")
 
 # --- 9b. the matched contact name shows on each talk's agenda card:
-# org-suffixed, plain and multi-speaker cards, on both days. The \u2248
-# prefix pins the assertion to the hint line, not the speaker line.
+# org-suffixed, plain, per-talk lightning and affiliation cards, on both
+# days. The \u2248 prefix pins the assertion to the hint line, not the
+# speaker line.
 tap("Day 2", exact=True)
 need("(Human) Attention is All You Need")
 need("\u2248 Zain Fathoni")
 need("name similarity only")
 need("Building a Browser Engine with AI Is Harder Than You Think")
 need("\u2248 Kresna Wijaya")
-need("Lightning talks")
-need("\u2248 Bagas Wastu")
+# lightning talks are split into one card per talk, sharing the window;
+# the hint line also proves strongest-first ordering (exact before
+# containment)
+need("Everything Has an API If You're Willing to Prompt")
+need("\u2248 Bagas Wastu, Bagas Wastu Junior - name similarity only")
+need("Tokenomics of Testing")  # the last split lightning card
 # affiliation containing a ";" must stay one speaker, not fake names
 need("Keynote: title to be announced")
 need("\u2248 Eko Kurniawan Khannedy")
