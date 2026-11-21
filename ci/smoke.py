@@ -116,7 +116,7 @@ def insert_synthetic_contact(name):
     if not ids:
         print("raw contact insert failed:", q.stdout, q.stderr)
         sys.exit(1)
-    rid = max(int(i) for i in ids)
+    rid = str(max(int(i) for i in ids))
     r2 = adb("shell", "content", "insert", "--uri", "content://com.android.contacts/data",
              "--bind", "raw_contact_id:i:" + rid,
              "--bind", "mimetype:s:vnd.android.cursor.item/name",
