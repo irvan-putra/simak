@@ -249,4 +249,53 @@ if not hits:
     print("no alarm registered for", PKG)
     sys.exit(1)
 
+# --- 12. boot re-arm: reboot with the reminder pending; BootReceiver must
+# re-arm it. Done BEFORE the firing test because firing consumes the stored
+# toggle by design.
+adb("shell", "reboot")
+subprocess.run(["adb", "wait-for-device"], check=True)
+for _ in range(60):
+    b = adb("shell", "getprop", "sys.boot_completed").stdout.decode().strip()
+    if b == "1":
+        break
+    time.sleep(3)
+time.sleep(10)  # let BootReceiver run
+alarm2 = adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")
+hits2 = [l for l in alarm2.splitlines() if PKG in l]
+open(f"{OUT}/12-boot-rearm-dumpsys.txt", "w").write("\n".join(hits2[:40]))
+if not hits2:
+    shot("FAILED-boot-rearm")
+    print("no alarm re-armed for", PKG, "after reboot")
+    sys.exit(1)
+
+# --- 13. reminder actually fires: emulator is userdebug, so move the clock
+# to just before 08:50 WIB on Day 2 and watch for the notification.
+root = adb("root")
+time.sleep(4)
+subprocess.run(["adb", "wait-for-device"], check=True)
+whoami = adb("shell", "id").stdout.decode()
+if "uid=0" not in whoami:
+    print("SKIP firing test: adb root unavailable:", whoami.strip())
+else:
+    adb("shell", "settings", "put", "global", "auto_time", "0")
+    adb("shell", "setprop", "persist.sys.timezone", "Asia/Jakarta")
+    time.sleep(2)
+    adb("shell", "date", "1122084926.30")  # 2026-11-22 08:49:30 device-local
+    fired = False
+    for _ in range(40):  # up to ~100 s; alarm due at 08:50:00
+        dn = adb("shell", "dumpsys", "notification").stdout.decode("utf-8", "replace")
+        if PKG in dn and "Starting at 09:00" in dn:
+            fired = True
+            open(f"{OUT}/13-notification-dumpsys.txt", "w").write(
+                "\n".join(l for l in dn.splitlines() if PKG in l or "Starting at" in l or "Registration" in l)[:4000])
+            break
+        time.sleep(2.5)
+    if not fired:
+        shot("FAILED-reminder-fired")
+        print("reminder notification did not fire after clock move")
+        sys.exit(1)
+    adb("shell", "cmd", "statusbar", "expand-notifications")
+    time.sleep(2)
+    shot("13-reminder-fired")
+
 print("SIMAK SMOKE OK")
