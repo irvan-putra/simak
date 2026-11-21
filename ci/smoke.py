@@ -302,19 +302,22 @@ else:
     fired = False
     for _ in range(40):  # up to ~100 s; alarm due at 08:50:00
         dn = adb("shell", "dumpsys", "notification", "--noredact").stdout.decode("utf-8", "replace")
-        # extras text is redacted in dumps on API 34, so match the package:
-        # simak is the only app that can be posting here
-        if PKG in dn:
+        # an actual posted notification is a NotificationRecord naming the
+        # package; the AppSettings section mentions the package always
+        if re.search(r"NotificationRecord\([^)]*pkg=" + PKG, dn):
             fired = True
             open(f"{OUT}/13-notification-dumpsys.txt", "w").write(
-                "\n".join(l for l in dn.splitlines() if PKG in l or "Starting at" in l or "Registration" in l)[:4000])
+                "\n".join(l for l in dn.splitlines() if PKG in l or "Starting at" in l or "Registration" in l or "android.title" in l)[:4000])
             break
         time.sleep(2.5)
     if not fired:
         open(f"{OUT}/13-fail-diagnostics.txt", "w").write(
             "== date ==\n" + adb("shell", "date").stdout.decode()
+            + "== notification ==\n" + adb("shell", "dumpsys", "notification", "--noredact").stdout.decode("utf-8", "replace")[-4000:]
             + "== alarm ==\n" + adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")[-3000:]
-            + "== logcat ==\n" + adb("logcat", "-d", "-t", "3000").stdout.decode("utf-8", "replace")[-6000:])
+            + "== logcat (simak + AndroidRuntime) ==\n" + "\n".join(
+                l for l in adb("logcat", "-d").stdout.decode("utf-8", "replace").splitlines()
+                if "simak" in l.lower() or "AndroidRuntime" in l or "NotificationManager" in l)[:6000])
         shot("FAILED-reminder-fired")
         print("reminder notification did not fire after clock move")
         sys.exit(1)
