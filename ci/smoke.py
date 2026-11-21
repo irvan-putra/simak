@@ -68,8 +68,19 @@ def tap_node(n):
     time.sleep(0.8)
 
 
+def dismiss_system_dialogs():
+    """Emulator infra occasionally raises an ANR dialog (e.g. 'Pixel
+    Launcher isn't responding') over the app; choose Wait and carry on."""
+    if present("isn't responding"):
+        n = find("Wait", exact=True)
+        if n:
+            tap_node(n)
+            time.sleep(2)
+
+
 def tap(text, exact=False, tries=6):
     for _ in range(tries):
+        dismiss_system_dialogs()
         n = find(text, exact)
         if n:
             tap_node(n)
@@ -83,6 +94,7 @@ def tap(text, exact=False, tries=6):
 
 def need(text, exact=False):
     for i in range(10):
+        dismiss_system_dialogs()
         if present(text, exact):
             return
         if i >= 2:
