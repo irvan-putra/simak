@@ -82,7 +82,7 @@ def tap(text, exact=False, tries=6):
 
 
 def need(text, exact=False):
-    for i in range(6):
+    for i in range(10):
         if present(text, exact):
             return
         if i >= 2:
@@ -180,6 +180,8 @@ adb("shell", "input", "text", "meet%sfriends%safter")
 time.sleep(1)
 need("meet friends after")
 shot("04-note")
+adb("shell", "input", "keyevent", "4")  # dismiss the IME before scrolling
+time.sleep(1)
 need("Building a Browser Engine with AI Is Harder Than You Think")
 need("Kresna Satya")
 shot("05-day2-kresna")
