@@ -237,6 +237,15 @@ shot("09b-day2-highlight")
 # --- 10. reminder through the notification permission dialog (Day 2 card,
 # session is tomorrow so it schedules in the future)
 tap("Day 2", exact=True)
+# step 9b scrolled down to the Kresna card; go back to the top so the
+# first bell in the tree is Registration's - the firing test moves the
+# clock to just before the Registration reminder
+for _ in range(15):
+    if present("Registration"):
+        break
+    adb("shell", "input", "swipe", "540", "700", "540", "1700", "300")
+    time.sleep(1)
+need("Registration")
 tap("\U0001F515", exact=True)  # bell, no-reminder state
 if not perm_dialog_button(["Allow"]):
     shot("FAILED-notif-dialog")
