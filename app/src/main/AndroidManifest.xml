@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Reminders alert the user through a notification (runtime-asked on
+         Android 13+, only when the first reminder is switched on). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Session reminders fire exactly at their minute where the system
+         allows it; the app falls back to approximate alarms and says so. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- A phone restart clears alarms, so still-future reminders are
+         re-armed after boot. No other work happens in the background. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- The "speakers you may know" check reads contact display names on the
+         phone, only when the user taps it. Names never leave the device. -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:label="simak"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/SimakTheme"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".ReminderReceiver" android:exported="false" />
+        <receiver android:name=".BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

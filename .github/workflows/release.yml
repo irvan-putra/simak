@@ -1,0 +1,142 @@
+name: simak signed release
+
+# Manual only. patuh source gate first, then builds the release APK, signs it
+# with the simak key from repository secrets, verifies the signature and
+# package, byte-checks the candidate via patuh, then publishes a GitHub
+# pre-release and verifies it live.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  consistency:
+    # patuh pre-publish source gate: package, version format, label,
+    # permission/license drift, family icon geometry, badge reads the
+    # candidate version. A failure stops the release before anything builds.
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@PATUH_PIN
+    with:
+      app: simak
+      published: false
+
+  release:
+    needs: consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    env:
+      EXPECTED_CERT_SHA256: "0BAFAF0A60D104E34F6BBD1DB15AFE0915D8EC99E9D435B2BA69547A99E9BA32"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x ./gradlew
+      - name: Read version
+        id: v
+        run: |
+          VER=$(sed -n 's/^val appVersionName = "\(.*\)"/\1/p' app/build.gradle.kts)
+          test -n "$VER"
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+      - name: Generated data matches schedule.json
+        run: python3 tools/make_data.py --check
+      - name: Launcher icons match the generator
+        run: |
+          pip install pillow==12.3.0
+          python3 tools/badge_icon.py --check
+      - name: Unit tests
+        run: ./gradlew --no-daemon testDebugUnitTest
+      - name: Build and sign
+        env:
+          SIMAK_KEYSTORE_B64: ${{ secrets.SIMAK_KEYSTORE_B64 }}
+          SIMAK_STORE_PASSWORD: ${{ secrets.SIMAK_STORE_PASSWORD }}
+          SIMAK_KEY_ALIAS: ${{ secrets.SIMAK_KEY_ALIAS }}
+          SIMAK_KEY_PASSWORD: ${{ secrets.SIMAK_KEY_PASSWORD }}
+        run: |
+          echo "$SIMAK_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/simak.jks"
+          export SIMAK_KEYSTORE_FILE="$RUNNER_TEMP/simak.jks"
+          ./gradlew --no-daemon assembleRelease
+          rm -f "$RUNNER_TEMP/simak.jks"
+      - name: Verify signature, package and permissions
+        shell: bash
+        run: |
+          set -euo pipefail
+          VER="${{ steps.v.outputs.version }}"
+          APK="app/build/outputs/apk/release/simak-v${VER}-release.apk"
+          test -f "$APK"
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          "$BT/apksigner" verify --verbose --print-certs "$APK" | tee /tmp/cert.txt
+          GOT=$(grep -m1 'certificate SHA-256 digest' /tmp/cert.txt | awk '{print toupper($NF)}')
+          echo "cert digest extracted: [$GOT]"
+          test "$GOT" = "$EXPECTED_CERT_SHA256"
+          echo "cert pin matches"
+          "$BT/aapt" dump badging "$APK" | head -3
+          "$BT/aapt" dump badging "$APK" | grep -F "package: name='com.vanipy.simak'"
+          "$BT/aapt" dump badging "$APK" | grep -F "versionName='${VER}'"
+          if "$BT/apksigner" verify --print-certs "$APK" | grep -q 'DEBUG'; then exit 1; fi
+          ci/check_permissions.sh "$BT/aapt" "$APK"
+          cp "$APK" "simak-v${VER}.apk"
+          sha256sum "simak-v${VER}.apk" | tee "simak-v${VER}.apk.sha256"
+      - name: Upload candidate APK for the byte check
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidate-apk
+          path: |
+            simak-v${{ steps.v.outputs.version }}.apk
+            simak-v${{ steps.v.outputs.version }}.apk.sha256
+          retention-days: 1
+
+  candidate-bytes:
+    # patuh checks the built APK's actual bytes (packaged icon badge) before
+    # anything is published. This is the preventive boundary.
+    needs: release
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@PATUH_PIN
+    with:
+      app: simak
+      published: false
+      candidate_apk_artifact: candidate-apk
+
+  publish:
+    # release must be a direct need for needs.release.outputs.version to
+    # resolve; the needs context covers direct dependencies only
+    needs: [candidate-bytes, release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EXPECTED_CERT_SHA256: "0BAFAF0A60D104E34F6BBD1DB15AFE0915D8EC99E9D435B2BA69547A99E9BA32"
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: candidate-apk, path: dist }
+      - name: Publish pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # no checkout in this job: gh needs explicit repository context
+          GH_REPO: ${{ github.repository }}
+        run: |
+          VER="${{ needs.release.outputs.version }}"
+          cp "dist/simak-v${VER}.apk" "dist/simak-v${VER}.apk.sha256" .
+          cat > notes.md <<NOTES
+          simak ${VER}: the IDSW 2026 companion. The full two-day agenda with day switching, stars for the sessions you care about, per-session notes, and optional reminders that alert 10 minutes before a session. The Guide tab explains the themes and suggests what to listen for. A "speakers you may know" check compares speaker names with your contacts on the phone - contact names never leave the device.
+
+          Fully offline: the agenda is built in, there is no account and no network code. Reminders use exact alarms only; no polling, no background services.
+
+          Signed with the simak key (certificate SHA-256 ${EXPECTED_CERT_SHA256}).
+          SHA-256 of the APK is in the attached .sha256 file.
+          NOTES
+          gh release create "v${VER}" "simak-v${VER}.apk" "simak-v${VER}.apk.sha256" \
+            --title "simak ${VER}" --notes-file notes.md --prerelease --target "${GITHUB_SHA}"
+
+  verify:
+    # post-publish: verifies the live release (tag, APK name, checksum,
+    # gallery card, downloaded sha256, packaged icon). Detects, cannot undo.
+    # The kaji gallery card is updated by the release owner right after
+    # publish; re-run this job once the card matches.
+    needs: publish
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@PATUH_PIN
+    with:
+      app: simak
+      published: true

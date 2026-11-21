@@ -1,0 +1,169 @@
+:root {
+  --ink: #10312B;
+  --ink-soft: #4A6B63;
+  --accent: #0E7C66;
+  --paper: #F7F6F1;
+  --card: #FFFFFF;
+  --star: #E8A13D;
+  --line: rgba(0, 0, 0, 0.09);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.45;
+}
+
+header {
+  padding: 18px 16px 4px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--accent);
+}
+
+header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+nav#tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 2;
+}
+
+nav#tabs button {
+  flex: 1;
+  padding: 9px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 15px;
+}
+
+nav#tabs button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+main {
+  padding: 4px 12px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.session {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 8px 0;
+}
+
+.session .top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.session .time {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 13px;
+  flex: 1;
+}
+
+.session .toggle {
+  border: 0;
+  background: none;
+  font-size: 20px;
+  padding: 2px 4px;
+  color: var(--ink-soft);
+}
+
+.session .toggle.on {
+  color: var(--star);
+}
+
+.session h2 {
+  margin: 4px 0 2px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.session .speaker {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.session .kind {
+  display: inline-block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1px 6px;
+  margin-top: 6px;
+}
+
+.session textarea {
+  width: 100%;
+  margin-top: 8px;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  font: inherit;
+  font-size: 14px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.session.break h2 {
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.guide h2 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: 20px 0 6px;
+}
+
+.guide p, .guide li {
+  font-size: 14px;
+}
+
+.guide ul {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+
+.guide li { margin: 5px 0; }
+
+footer {
+  padding: 0 16px 32px;
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+a { color: var(--accent); }

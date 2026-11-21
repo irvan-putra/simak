@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SimakTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">#0E7C66</item>
+        <item name="android:colorPrimaryDark">#10312B</item>
+        <item name="android:colorAccent">#0E7C66</item>
+        <item name="android:windowBackground">#F7F6F1</item>
+        <item name="android:statusBarColor">#10312B</item>
+        <item name="android:fontFamily">sans</item>
+    </style>
+</resources>
