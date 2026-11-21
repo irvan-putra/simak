@@ -61,14 +61,31 @@ public final class ContactsMatch {
      * granted; names stay in memory on the device, never uploaded.
      */
     public static Map<String, List<String>> matchedBySpeaker(Context ctx) {
-        Map<String, List<String>> out = new LinkedHashMap<>();
+        Map<String, List<String>> byPart = new LinkedHashMap<>();
         for (Hit hit : find(ctx)) {
-            List<String> names = out.get(hit.speaker);
+            List<String> names = byPart.get(hit.speaker);
             if (names == null) {
                 names = new ArrayList<>();
-                out.put(hit.speaker, names);
+                byPart.put(hit.speaker, names);
             }
             if (!names.contains(hit.contact)) names.add(hit.contact);
+        }
+        // Agenda cards render the raw speaker field, so join normalized
+        // parts back to it: org-suffixed and multi-speaker cards highlight
+        // too, with every matched contact name kept.
+        Map<String, List<String>> out = new LinkedHashMap<>();
+        for (ScheduleData.Session s : ScheduleData.SESSIONS) {
+            if (s.speaker.isEmpty()) continue;
+            List<String> names = new ArrayList<>();
+            for (String part : ScheduleData.speakerParts(s.speaker)) {
+                List<String> hit = byPart.get(part);
+                if (hit != null) {
+                    for (String n : hit) {
+                        if (!names.contains(n)) names.add(n);
+                    }
+                }
+            }
+            if (!names.isEmpty()) out.put(s.speaker, names);
         }
         return out;
     }

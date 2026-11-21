@@ -137,7 +137,13 @@ def perm_dialog_button(label_variants):
 # --- 0. synthetic fixture: one made-up contact sharing a long name token
 # with a Day 2 speaker ("kresna"), to prove fuzzy matching without any real
 # contact data.
+# Synthetic contacts, one per card shape the highlight must join: a plain
+# speaker field (fuzzy token match), org-suffixed fields on both days, and
+# a multi-speaker lightning card.
 insert_synthetic_contact("Kresna Wijaya")
+insert_synthetic_contact("Zain Fathoni")
+insert_synthetic_contact("Bagas Wastu")
+insert_synthetic_contact("Thomas Edwin Santosa")
 
 # --- 1. launcher icon pixels (family icon with the version badge)
 adb("shell", "input", "keyevent", "3")  # HOME
@@ -226,13 +232,21 @@ need("Kresna Wijaya")  # the synthetic contact surfaced as a hint
 need("not proof it is the same person")
 shot("09-contacts-match")
 
-# --- 9b. the matched contact name shows on the talk's agenda card
-# (synthetic contact matches only the Kresna card)
+# --- 9b. the matched contact name shows on each talk's agenda card:
+# org-suffixed, plain and multi-speaker cards, on both days. The \u2248
+# prefix pins the assertion to the hint line, not the speaker line.
 tap("Day 2", exact=True)
-need("Building a Browser Engine with AI Is Harder Than You Think")
-need("Kresna Wijaya")
+need("(Human) Attention is All You Need")
+need("\u2248 Zain Fathoni")
 need("name similarity only")
+need("Building a Browser Engine with AI Is Harder Than You Think")
+need("\u2248 Kresna Wijaya")
+need("Lightning talks")
+need("\u2248 Bagas Wastu")
 shot("09b-day2-highlight")
+tap("Day 1", exact=True)
+need("\u2248 Thomas Edwin Santosa")
+shot("09c-day1-highlight")
 
 # --- 10. reminder through the notification permission dialog (Day 2 card,
 # session is tomorrow so it schedules in the future)

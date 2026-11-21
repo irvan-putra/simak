@@ -90,15 +90,25 @@ public final class ScheduleData {
         }),
     };
 
+    /**
+     * Individual speaker names inside a raw session speaker field: split on
+     * ";" for multi-speaker cards, org suffix in parentheses dropped.
+     */
+    public static java.util.List<String> speakerParts(String speakerField) {
+        java.util.List<String> out = new java.util.ArrayList<>();
+        for (String part : speakerField.split(";")) {
+            String name = part.replaceAll("\\(.*\\)", "").trim();
+            if (!name.isEmpty()) out.add(name);
+        }
+        return out;
+    }
+
     /** Distinct speaker names across all sessions, for the contacts check. */
     public static String[] speakers() {
         java.util.LinkedHashSet<String> out = new java.util.LinkedHashSet<>();
         for (Session s : SESSIONS) {
             if (s.speaker.isEmpty()) continue;
-            for (String part : s.speaker.split(";")) {
-                String name = part.replaceAll("\\(.*\\)", "").trim();
-                if (!name.isEmpty()) out.add(name);
-            }
+            out.addAll(speakerParts(s.speaker));
         }
         return out.toArray(new String[0]);
     }

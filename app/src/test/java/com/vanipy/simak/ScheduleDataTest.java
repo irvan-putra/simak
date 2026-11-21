@@ -86,4 +86,29 @@ public class ScheduleDataTest {
             assertTrue(sec.bullets.length > 0);
         }
     }
+
+    @Test
+    public void speakerPartsStripOrgSuffixes() {
+        assertEquals(java.util.Arrays.asList("Zain Fathoni"),
+                ScheduleData.speakerParts("Zain Fathoni (BookThatApp)"));
+        assertEquals(java.util.Arrays.asList("Kresna Satya"),
+                ScheduleData.speakerParts("Kresna Satya"));
+    }
+
+    @Test
+    public void speakerPartsSplitMultiSpeakerCards() {
+        assertEquals(java.util.Arrays.asList("Azzam Muhammadi Rizqun Karima", "Bagas Wastu"),
+                ScheduleData.speakerParts("Azzam Muhammadi Rizqun Karima; Bagas Wastu"));
+    }
+
+    @Test
+    public void everyCardSpeakerPartIsInSpeakersList() {
+        // The highlight join depends on cards and speakers() agreeing here.
+        Set<String> listed = new HashSet<>(java.util.Arrays.asList(ScheduleData.speakers()));
+        for (ScheduleData.Session s : ScheduleData.SESSIONS) {
+            for (String part : ScheduleData.speakerParts(s.speaker)) {
+                assertTrue("missing " + part, listed.contains(part));
+            }
+        }
+    }
 }
