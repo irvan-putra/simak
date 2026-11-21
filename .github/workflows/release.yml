@@ -15,7 +15,7 @@ jobs:
     # patuh pre-publish source gate: package, version format, label,
     # permission/license drift, family icon geometry, badge reads the
     # candidate version. A failure stops the release before anything builds.
-    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@63e2015e44a30f4e21bc66a1f0a23ed7e9cfce81
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@45b09c84961c32269ab2aac63ec0cfd9c35eb79b
     with:
       app: simak
       published: false
@@ -94,7 +94,7 @@ jobs:
     # patuh checks the built APK's actual bytes (packaged icon badge) before
     # anything is published. This is the preventive boundary.
     needs: release
-    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@63e2015e44a30f4e21bc66a1f0a23ed7e9cfce81
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@45b09c84961c32269ab2aac63ec0cfd9c35eb79b
     with:
       app: simak
       published: false
@@ -136,7 +136,7 @@ jobs:
     # The kaji gallery card is updated by the release owner right after
     # publish; re-run this job once the card matches.
     needs: publish
-    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@63e2015e44a30f4e21bc66a1f0a23ed7e9cfce81
+    uses: irvan-putra/patuh/.github/workflows/release-gate.yml@45b09c84961c32269ab2aac63ec0cfd9c35eb79b
     with:
       app: simak
       published: true
