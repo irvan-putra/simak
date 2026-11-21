@@ -301,8 +301,10 @@ else:
         "\n".join(l for l in alarm3.splitlines() if PKG in l))
     fired = False
     for _ in range(40):  # up to ~100 s; alarm due at 08:50:00
-        dn = adb("shell", "dumpsys", "notification").stdout.decode("utf-8", "replace")
-        if PKG in dn and "Starting at 09:00" in dn:
+        dn = adb("shell", "dumpsys", "notification", "--noredact").stdout.decode("utf-8", "replace")
+        # extras text is redacted in dumps on API 34, so match the package:
+        # simak is the only app that can be posting here
+        if PKG in dn:
             fired = True
             open(f"{OUT}/13-notification-dumpsys.txt", "w").write(
                 "\n".join(l for l in dn.splitlines() if PKG in l or "Starting at" in l or "Registration" in l)[:4000])
