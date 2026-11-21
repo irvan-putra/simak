@@ -1,0 +1,49 @@
+name: simak emulator smoke test (synthetic data)
+
+# Manual only. Downloads the PUBLISHED release APK (never a fresh build),
+# verifies its sha256, installs it on a CI emulator and drives the real UI
+# with synthetic data only: day tabs, star/note persistence across a force
+# stop, the guide, contacts permission denial then synthetic-match flow,
+# reminder scheduling with the notification-permission path, and launcher
+# icon pixels. Screenshots land in the simak-emulator-screenshots artifact.
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag whose published APK to smoke test."
+        required: true
+        default: "v0.1.0"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Run the published APK on an emulator and capture screenshots
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          GH_TOKEN: ${{ github.token }}
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          script: bash ci/run.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simak-emulator-screenshots
+          path: ci/shots/*
+          if-no-files-found: warn
+          retention-days: 7
