@@ -86,7 +86,8 @@ def need(text, exact=False):
         if present(text, exact):
             return
         if i >= 2:
-            adb("shell", "input", "swipe", "540", "700", "540", "1800", "300")
+            # finger moves up so the list advances forward (toward later items)
+            adb("shell", "input", "swipe", "540", "1700", "540", "700", "300")
         time.sleep(1)
     shot("FAILED-need-" + re.sub(r"\W+", "_", text)[:30])
     print("EXPECTED ON SCREEN:", text)
@@ -120,7 +121,7 @@ def insert_synthetic_contact(name):
     r2 = adb("shell", "content", "insert", "--uri", "content://com.android.contacts/data",
              "--bind", "raw_contact_id:i:" + rid,
              "--bind", "mimetype:s:vnd.android.cursor.item/name",
-             "--bind", "data1:s:" + name)
+             "--bind", "data1:s:'" + name + "'")
     print("synthetic contact:", name, "->", r2.stdout.decode().strip())
 
 
@@ -141,7 +142,9 @@ insert_synthetic_contact("Kresna Wijaya")
 # --- 1. launcher icon pixels (family icon with the version badge)
 adb("shell", "input", "keyevent", "3")  # HOME
 time.sleep(2)
-adb("shell", "input", "swipe", "540", "1800", "540", "600", "400")  # open app drawer
+adb("shell", "input", "swipe", "540", "2000", "540", "500", "600")  # app drawer (gesture nav)
+time.sleep(2)
+adb("shell", "input", "swipe", "540", "2000", "540", "500", "600")
 time.sleep(2)
 if wait_present("simak", exact=True, tries=6):
     shot("01-launcher-icon")
@@ -157,21 +160,16 @@ need("simak - IDSW 2026")
 need("Registration")
 shot("02-day1")
 
-# --- 3. Day 2 tab with the Kresna session
+# --- 3. Day 2 tab: star and note the first card while it is at the top,
+# then scroll forward to the Kresna session.
 tap("Day 2", exact=True)
-need("Building a Browser Engine with AI Is Harder Than You Think")
-need("Kresna Satya")
-shot("03-day2-kresna")
-
-# --- 4. star the first Day 2 card
-tap("\u2606", exact=True)  # outlined star
+need("Registration")
+tap("\u2606", exact=True)  # outlined star on the first card
 if not wait_present("\u2605", exact=True, tries=4):
     shot("FAILED-star-toggle")
     print("star did not toggle to filled")
     sys.exit(1)
-shot("04-starred")
-
-# --- 5. note on the first Day 2 card (tap title to expand, then type)
+shot("03-starred")
 tap("Registration")
 if not wait_present("Your note for this session", tries=4):
     shot("FAILED-note-expand")
@@ -181,7 +179,10 @@ tap("Your note for this session")
 adb("shell", "input", "text", "meet%sfriends%safter")
 time.sleep(1)
 need("meet friends after")
-shot("05-note")
+shot("04-note")
+need("Building a Browser Engine with AI Is Harder Than You Think")
+need("Kresna Satya")
+shot("05-day2-kresna")
 
 # --- 6. persistence across a force stop
 adb("shell", "am", "force-stop", PKG)
