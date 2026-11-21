@@ -32,10 +32,15 @@ public final class Ui {
     }
 
     static GradientDrawable card(Context ctx) {
+        return card(ctx, false);
+    }
+
+    /** Card background; highlighted cards get a warm tint and a gold edge. */
+    static GradientDrawable card(Context ctx, boolean highlighted) {
         GradientDrawable g = new GradientDrawable();
-        g.setColor(CARD);
+        g.setColor(highlighted ? 0xFFFCF3DF : CARD);
         g.setCornerRadius(dp(ctx, 12));
-        g.setStroke(dp(ctx, 1), LINE);
+        g.setStroke(dp(ctx, 1), highlighted ? STAR : LINE);
         return g;
     }
 

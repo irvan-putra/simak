@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * On-device check of the speaker list against the phone's contacts. Reads
@@ -51,5 +53,23 @@ public final class ContactsMatch {
             }
         }
         return hits;
+    }
+
+    /**
+     * Speaker fields to their contact look-alikes, for highlighting agenda
+     * cards with the matched names. Call only after READ_CONTACTS is
+     * granted; names stay in memory on the device, never uploaded.
+     */
+    public static Map<String, List<String>> matchedBySpeaker(Context ctx) {
+        Map<String, List<String>> out = new LinkedHashMap<>();
+        for (Hit hit : find(ctx)) {
+            List<String> names = out.get(hit.speaker);
+            if (names == null) {
+                names = new ArrayList<>();
+                out.put(hit.speaker, names);
+            }
+            if (!names.contains(hit.contact)) names.add(hit.contact);
+        }
+        return out;
     }
 }

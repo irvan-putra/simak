@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * simak - the IDSW 2026 companion. Two day tabs with the full agenda, a
@@ -32,6 +35,7 @@ public class MainActivity extends Activity {
     private LinearLayout content;
     private String day = "day1";
     private String pendingReminderSession;
+    private Map<String, List<String>> contactMatches = Collections.emptyMap();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,15 @@ public class MainActivity extends Activity {
             renderGuide();
             return;
         }
+        // Highlight possible contact matches on the agenda when contacts
+        // access was already granted from the guide check. Never asks here;
+        // names stay on the phone and matches stay hints, not proof.
+        if (Build.VERSION.SDK_INT < 23
+                || checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            contactMatches = ContactsMatch.matchedBySpeaker(this);
+        } else {
+            contactMatches = Collections.emptyMap();
+        }
         for (ScheduleData.Session s : ScheduleData.SESSIONS) {
             if (s.day.equals(day)) content.addView(sessionCard(s));
         }
@@ -93,9 +106,11 @@ public class MainActivity extends Activity {
     }
 
     private View sessionCard(ScheduleData.Session s) {
+        List<String> matchedNames = s.speaker.isEmpty() ? null : contactMatches.get(s.speaker);
+        boolean contactMatch = matchedNames != null && !matchedNames.isEmpty();
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackground(Ui.card(this));
+        card.setBackground(Ui.card(this, contactMatch));
         Ui.pad(card, this, 12, 10, 12, 10);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -134,6 +149,13 @@ public class MainActivity extends Activity {
             TextView speaker = Ui.text(this, 13, Ui.INK_SOFT, Typeface.NORMAL);
             speaker.setText(s.speaker);
             card.addView(speaker);
+        }
+
+        if (contactMatch) {
+            TextView hint = Ui.text(this, 12, Ui.STAR, Typeface.BOLD);
+            hint.setText("\u2248 " + TextUtils.join(", ", matchedNames) + " - name similarity only");
+            Ui.pad(hint, this, 0, 2, 0, 0);
+            card.addView(hint);
         }
 
         LinearLayout noteArea = new LinearLayout(this);

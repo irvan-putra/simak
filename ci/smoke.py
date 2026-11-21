@@ -226,6 +226,14 @@ need("Kresna Wijaya")  # the synthetic contact surfaced as a hint
 need("not proof it is the same person")
 shot("09-contacts-match")
 
+# --- 9b. the matched contact name shows on the talk's agenda card
+# (synthetic contact matches only the Kresna card)
+tap("Day 2", exact=True)
+need("Building a Browser Engine with AI Is Harder Than You Think")
+need("Kresna Wijaya")
+need("name similarity only")
+shot("09b-day2-highlight")
+
 # --- 10. reminder through the notification permission dialog (Day 2 card,
 # session is tomorrow so it schedules in the future)
 tap("Day 2", exact=True)
