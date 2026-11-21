@@ -5,12 +5,17 @@ schedule.json at the repo root is the single source of truth. This script
 writes:
   app/src/main/java/com/vanipy/simak/ScheduleData.java  (Java literals)
   docs/data.js                                          (window.SIMAK_DATA)
+  docs/sw.js                                            (cache name stamped
+                                                         from event.version so
+                                                         every release busts
+                                                         old offline caches)
 
 Both are checked into the repo. --check regenerates into a temp dir and
 fails if the committed files differ, so CI can prove they came from this
 script and nobody edited only one side.
 """
 import json
+import re
 import os
 import shutil
 import sys
@@ -116,6 +121,23 @@ def js_source(data):
             "window.SIMAK_DATA = " + payload + ";\n")
 
 
+SW_OUT = os.path.join(ROOT, "docs/sw.js")
+
+
+def sw_source(data, template):
+    """Stamp the offline cache name from event.version. Every version bump
+    renames the cache, so a new service worker install pre-caches fresh
+    assets and activation deletes the old cache - existing phones pick the
+    update up on their next visit, without touching localStorage."""
+    version = data["event"]["version"]
+    stamped, n = re.subn(r"var CACHE = '[^']*';",
+                         "var CACHE = 'simak-v" + version + "';",
+                         template)
+    if n != 1:
+        raise SystemExit("docs/sw.js: expected exactly one CACHE line to stamp")
+    return stamped
+
+
 def write_all(root):
     with open(os.path.join(root, "schedule.json"), encoding="utf-8") as fh:
         data = json.load(fh)
@@ -127,6 +149,11 @@ def write_all(root):
         fh.write(java)
     with open(js_out, "w", encoding="utf-8") as fh:
         fh.write(js)
+    if root == ROOT:
+        with open(SW_OUT, encoding="utf-8") as fh:
+            stamped = sw_source(data, fh.read())
+        with open(SW_OUT, "w", encoding="utf-8") as fh:
+            fh.write(stamped)
 
 
 def check():
@@ -140,6 +167,12 @@ def check():
         ):
             if not os.path.exists(committed) or open(committed, "rb").read() != open(generated, "rb").read():
                 sys.exit("committed file differs from generator output: " + committed)
+        with open(os.path.join(ROOT, "schedule.json"), encoding="utf-8") as fh:
+            data = json.load(fh)
+        with open(SW_OUT, encoding="utf-8") as fh:
+            sw_committed = fh.read()
+        if sw_source(data, sw_committed) != sw_committed:
+            sys.exit("docs/sw.js cache name does not match event.version; run tools/make_data.py")
         print("committed data files match the generator")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -150,4 +183,4 @@ if __name__ == "__main__":
         check()
     else:
         write_all(ROOT)
-        print("wrote ScheduleData.java and docs/data.js")
+        print("wrote ScheduleData.java, docs/data.js and stamped docs/sw.js")

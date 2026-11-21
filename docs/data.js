@@ -6,9 +6,10 @@ window.SIMAK_DATA = {
     "venue": "Usmar Ismail Hall, Jakarta Selatan",
     "dates": "21-22 November 2026",
     "source": "https://idsw.dev",
-    "checked": "2026-11-21 morning WIB",
+    "checked": "2026-11-21 11:31 WIB",
     "timezone": "Asia/Jakarta",
-    "note": "The agenda is copied from idsw.dev as checked above; the site states the schedule is subject to change. Day 2's site header says 09.00-18.15 WIB, but the published agenda's last item ends at 17:40."
+    "note": "The agenda is copied from idsw.dev as checked above; the site states the schedule is subject to change. Day 2's site header says 09.00-18.15 WIB, but the published agenda's last item ends at 17:40.",
+    "version": "0.3.1"
   },
   "days": [
     {
@@ -124,8 +125,8 @@ window.SIMAK_DATA = {
           "id": "d1-1705",
           "start": "17:05",
           "end": "18:05",
-          "title": "Panel discussion",
-          "speaker": "",
+          "title": "Panel: When AI Agents Go Wrong: Failures, Misuse, and Real-World Consequences",
+          "speaker": "Muqorrobin Marufi Syihab / Robin; Mustafa Zaki Assagaf; Mansur Maturidi Arief",
           "kind": "panel"
         },
         {

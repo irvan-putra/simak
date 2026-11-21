@@ -156,4 +156,18 @@ public class ScheduleDataTest {
         assertEquals("15:30", legacy.end);
         assertEquals("", legacy.speaker);
     }
+
+    @Test
+    public void panelKeepsItsIdAndCarriesPublishedTitleAndPanelists() {
+        ScheduleData.Session panel = null;
+        for (ScheduleData.Session s : ScheduleData.SESSIONS) {
+            if (s.id.equals("d1-1705")) panel = s;
+        }
+        assertNotNull("panel id must stay stable for saved stars and notes", panel);
+        assertEquals("panel", panel.kind);
+        assertTrue(panel.title.contains("When AI Agents Go Wrong"));
+        assertTrue(panel.speaker.contains("Muqorrobin Marufi Syihab"));
+        assertTrue(panel.speaker.contains("Mustafa Zaki Assagaf"));
+        assertTrue(panel.speaker.contains("Mansur Maturidi Arief"));
+    }
 }

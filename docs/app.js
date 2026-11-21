@@ -134,5 +134,13 @@
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(function () { /* offline cache optional */ });
+    // A new service worker (new cache name) means fresh assets are ready;
+    // reload once so the page renders them instead of the old cache's copy.
+    var swReloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (swReloaded) return;
+      swReloaded = true;
+      location.reload();
+    });
   }
 })();

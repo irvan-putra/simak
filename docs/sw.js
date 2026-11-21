@@ -1,6 +1,6 @@
 /* Offline cache for the simak web companion. Bump CACHE on every deploy so
    old assets never linger. */
-var CACHE = 'simak-v0.1.0';
+var CACHE = 'simak-v0.3.1';
 var ASSETS = [
   './',
   'index.html',

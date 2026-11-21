@@ -27,7 +27,7 @@ public final class ScheduleData {
     public static final String VENUE = "Usmar Ismail Hall, Jakarta Selatan";
     public static final String DATES = "21-22 November 2026";
     public static final String SOURCE = "https://idsw.dev";
-    public static final String CHECKED = "2026-11-21 morning WIB";
+    public static final String CHECKED = "2026-11-21 11:31 WIB";
     public static final String EVENT_NOTE = "The agenda is copied from idsw.dev as checked above; the site states the schedule is subject to change. Day 2's site header says 09.00-18.15 WIB, but the published agenda's last item ends at 17:40.";
     public static final String ABOUT = "IDSW is a community-led developer conference run by PERKODI with Indonesian tech communities (Python ID, id-ruby, TEKNUM, JakartaJS, Deeptech.id). The 2026 edition runs 21-22 November at Usmar Ismail Hall, Jakarta Selatan. Venue tickets are sold out per the site FAQ; streaming tickets are sold via TipTip and there is a stream site at stream.idsw.dev.";
 
@@ -45,7 +45,7 @@ public final class ScheduleData {
         new Session("d1-1455", "day1", "2026-11-21", "14:55", "15:25", "From Air to Packets and Back: How Voice Travels Between Devices", "Yoseph Bernandus (RevComm Inc)", "talk"),
         new Session("d1-1530", "day1", "2026-11-21", "15:30", "16:30", "Coffee break", "", "break"),
         new Session("d1-1630", "day1", "2026-11-21", "16:30", "17:00", "From Chatbot to Analytics Agent: What Broke When LLMs Met Our Real BigQuery Data", "Faiq Miftakhul Falakh (AssetFindr)", "talk"),
-        new Session("d1-1705", "day1", "2026-11-21", "17:05", "18:05", "Panel discussion", "", "panel"),
+        new Session("d1-1705", "day1", "2026-11-21", "17:05", "18:05", "Panel: When AI Agents Go Wrong: Failures, Misuse, and Real-World Consequences", "Muqorrobin Marufi Syihab / Robin; Mustafa Zaki Assagaf; Mansur Maturidi Arief", "panel"),
         new Session("d1-1805", "day1", "2026-11-21", "18:05", "18:15", "Closing", "", "ceremony"),
         new Session("d2-0900", "day2", "2026-11-22", "09:00", "09:30", "Registration", "", "break"),
         new Session("d2-0930", "day2", "2026-11-22", "09:30", "09:40", "Opening", "", "ceremony"),
