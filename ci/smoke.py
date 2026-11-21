@@ -292,6 +292,13 @@ else:
     adb("shell", "setprop", "persist.sys.timezone", "Asia/Jakarta")
     time.sleep(2)
     adb("shell", "date", "1122084926.30")  # 2026-11-22 08:49:30 device-local
+    time.sleep(1)
+    open(f"{OUT}/13-clock.txt", "w").write(
+        adb("shell", "date").stdout.decode()
+        + adb("shell", "getprop", "persist.sys.timezone").stdout.decode())
+    alarm3 = adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")
+    open(f"{OUT}/13-alarm-after-clockmove.txt", "w").write(
+        "\n".join(l for l in alarm3.splitlines() if PKG in l))
     fired = False
     for _ in range(40):  # up to ~100 s; alarm due at 08:50:00
         dn = adb("shell", "dumpsys", "notification").stdout.decode("utf-8", "replace")
@@ -302,6 +309,10 @@ else:
             break
         time.sleep(2.5)
     if not fired:
+        open(f"{OUT}/13-fail-diagnostics.txt", "w").write(
+            "== date ==\n" + adb("shell", "date").stdout.decode()
+            + "== alarm ==\n" + adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")[-3000:]
+            + "== logcat ==\n" + adb("logcat", "-d", "-t", "3000").stdout.decode("utf-8", "replace")[-6000:])
         shot("FAILED-reminder-fired")
         print("reminder notification did not fire after clock move")
         sys.exit(1)
