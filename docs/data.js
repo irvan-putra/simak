@@ -9,7 +9,7 @@ window.SIMAK_DATA = {
     "checked": "2026-11-21 11:31 WIB",
     "timezone": "Asia/Jakarta",
     "note": "The agenda is copied from idsw.dev as checked above; the site states the schedule is subject to change. Day 2's site header says 09.00-18.15 WIB, but the published agenda's last item ends at 17:40.",
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "days": [
     {

@@ -133,7 +133,7 @@
   render();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(function () { /* offline cache optional */ });
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () { /* offline cache optional */ });
     // A new service worker (new cache name) means fresh assets are ready;
     // reload once so the page renders them instead of the old cache's copy.
     var swReloaded = false;
