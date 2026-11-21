@@ -231,6 +231,19 @@ need("simak - IDSW 2026")
 need("Registration")
 shot("02-day1")
 
+# --- 2b. Day 1 panel card: the session whose title and panelists were
+# published after the morning snapshot.
+need("When AI Agents Go Wrong")
+need("Mansur Maturidi Arief")
+shot("02b-day1-panel")
+# back to the top so step 3's first-card assertions hold
+for _ in range(15):
+    if present("Registration"):
+        break
+    adb("shell", "input", "swipe", "540", "700", "540", "1700", "300")
+    time.sleep(1)
+need("Registration")
+
 # --- 3. Day 2 tab: star and note the first card while it is at the top,
 # then scroll forward to the Kresna session.
 tap("Day 2", exact=True)
