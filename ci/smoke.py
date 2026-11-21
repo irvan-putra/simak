@@ -252,18 +252,29 @@ if not hits:
 # --- 12. boot re-arm: reboot with the reminder pending; BootReceiver must
 # re-arm it. Done BEFORE the firing test because firing consumes the stored
 # toggle by design.
+boot_count = adb("shell", "getprop", "sys.boot_count").stdout.decode().strip()
 adb("shell", "reboot")
+time.sleep(15)  # let the device actually go down: wait-for-device returns instantly otherwise
 subprocess.run(["adb", "wait-for-device"], check=True)
-for _ in range(60):
-    b = adb("shell", "getprop", "sys.boot_completed").stdout.decode().strip()
-    if b == "1":
+for _ in range(80):
+    done = adb("shell", "getprop", "sys.boot_completed").stdout.decode().strip()
+    cnt = adb("shell", "getprop", "sys.boot_count").stdout.decode().strip()
+    if done == "1" and cnt and cnt != boot_count:
         break
     time.sleep(3)
-time.sleep(10)  # let BootReceiver run
-alarm2 = adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")
-hits2 = [l for l in alarm2.splitlines() if PKG in l]
+time.sleep(15)  # let BootReceiver run under post-boot churn
+hits2 = []
+for _ in range(3):
+    alarm2 = adb("shell", "dumpsys", "alarm").stdout.decode("utf-8", "replace")
+    hits2 = [l for l in alarm2.splitlines() if PKG in l]
+    if hits2:
+        break
+    time.sleep(10)
 open(f"{OUT}/12-boot-rearm-dumpsys.txt", "w").write("\n".join(hits2[:40]))
 if not hits2:
+    logcat = adb("logcat", "-d", "-t", "2000").stdout.decode("utf-8", "replace")
+    open(f"{OUT}/12-boot-logcat.txt", "w").write(
+        "\n".join(l for l in logcat.splitlines() if "simak" in l.lower() or "Boot" in l)[:6000])
     shot("FAILED-boot-rearm")
     print("no alarm re-armed for", PKG, "after reboot")
     sys.exit(1)
