@@ -143,8 +143,18 @@ base_apks = glob.glob("/tmp/base/simak-v*.apk")
 if base_apks:
     launch()
     tap("Day 2", exact=True)
-    need("Lightning talks:")
-    tap("Lightning talks:")
+    if wait_present("Lightning talks:", tries=4):
+        # pre-split base: the combined card carries the seeded note
+        tap("Lightning talks:")
+        seed_title = "Lightning talks:"
+        migrated_title = "whole block (saved before the split)"
+    else:
+        # post-split base (e.g. 0.3.0): seed on one split card instead;
+        # post-upgrade the same card must keep it (id-keyed state)
+        need("Everything Has an API If You're Willing to Prompt")
+        tap("Everything Has an API If You're Willing to Prompt")
+        seed_title = "Everything Has an API If You're Willing to Prompt"
+        migrated_title = seed_title
     need("Your note for this session")
     tap("Your note for this session")
     adb("shell", "input", "text", "legacy%sblock%snote")
@@ -165,10 +175,11 @@ if base_apks:
     time.sleep(2)
     launch()
     tap("Day 2", exact=True)
-    need("whole block (saved before the split)")
-    tap("whole block (saved before the split)")
+    need(migrated_title)
+    tap(migrated_title)
     need("legacy block note")
-    need("kept as-is")
+    if migrated_title != seed_title:
+        need("kept as-is")
     shot("00b-legacy-state-migrated")
     adb("shell", "input", "keyevent", "4")
     adb("shell", "am", "force-stop", PKG)  # fresh, collapsed list for step 1
