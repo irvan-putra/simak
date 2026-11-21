@@ -249,6 +249,13 @@ need("Keynote: title to be announced")
 need("\u2248 Eko Kurniawan Khannedy")
 shot("09b-day2-highlight")
 tap("Day 1", exact=True)
+# the Day 2 scroll position carries over; go back to the top first
+for _ in range(15):
+    if present("Registration"):
+        break
+    adb("shell", "input", "swipe", "540", "700", "540", "1700", "300")
+    time.sleep(1)
+need("Registration")
 need("\u2248 Thomas Edwin Santosa")
 shot("09c-day1-highlight")
 
