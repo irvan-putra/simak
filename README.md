@@ -1,9 +1,11 @@
 # simak
 
-**simak** (Indonesian for "listen closely") is the companion for **IDSW 2026**
-(Indonesia Software Developer Conference, 21-22 November, Usmar Ismail Hall,
-Jakarta Selatan): the full two-day agenda, a guide to the topics, stars for
-the sessions you care about, your own notes, and optional reminders.
+**simak** (Indonesian for "listen closely") is the offline companion for
+**IDSW 2026** (Indonesia Software Developer Conference, 21-22 November 2026,
+Usmar Ismail Hall, Jakarta Selatan): the full two-day agenda, a guide to the
+topics, stars for the sessions you care about, your own notes, and optional
+reminders. The event has passed; simak keeps working fully offline as its
+archive.
 
 It comes in two shapes from one source of truth (`schedule.json`):
 
@@ -14,17 +16,19 @@ It comes in two shapes from one source of truth (`schedule.json`):
   check compares speaker names with your contacts **on the phone only**;
   contact names never leave the device, and a name match is a hint, never
   proof of identity.
-- **Web companion** (`docs/`, served by GitHub Pages) - day switching, stars
-  and notes (kept in the browser's local storage), the same guide, and a
-  service worker so it keeps working offline once opened.
+- **Web companion** (`docs/`, live at
+  [vanipy.com/simak](https://vanipy.com/simak/)) - day switching, stars and
+  notes (kept in the browser's local storage), the same guide, and a service
+  worker so it keeps working offline once opened.
 
-AGPL-3.0. Direct APK download is on the [releases page](../../releases); each
-release is signed with the simak key and ships its SHA-256 next to the APK.
+AGPL-3.0. Direct APK download is on the
+[releases page](https://github.com/irvan-putra/simak/releases); each release
+is signed with the simak key and ships its SHA-256 next to the APK.
 
 ## Honest limits
 
 - The agenda is copied from [idsw.dev](https://idsw.dev) as checked on
-  2026-11-21 morning WIB; the event states the schedule is subject to
+  2026-11-21 morning WIB; the event stated the schedule was subject to
   change. Late schedule changes need a data update (`schedule.json`), not
   just an app refresh.
 - The Guide tab's themes and priorities are our interpretation for a
