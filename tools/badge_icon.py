@@ -136,25 +136,24 @@ def star(d, cx, cy, r, fill):
 
 
 def simak_art():
-    """A schedule card with three rows; the middle row carries a gold star."""
+    """Binoculars (simak = watch closely) with a gold star glint in one lens."""
     art, d = new_layer()
-    x0, y0, x1, y1 = S * .32, S * .30, S * .68, S * .68
-    d.rounded_rectangle([x0, y0, x1, y1], radius=S * .04, fill=SIMAK_CARD)
-    # binding tabs on the card's top edge
-    for fx in (.42, .58):
-        d.rounded_rectangle([S * fx - S * .012, y0 - S * .022, S * fx + S * .012, y0 + S * .022],
-                            radius=S * .012, fill=SIMAK_CARD)
-    # schedule rows
-    rows = [(.42, .34), (.53, .26), (.63, .34)]  # (y fraction, line half-width fraction of card)
-    lx0, lx1 = x0 + S * .05, x1 - S * .05
-    lw = max(2, int(S * .017))
-    for i, (fy, hw) in enumerate(rows):
-        y = S * fy
-        if i == 1:
-            d.line([lx0, y, lx0 + (lx1 - lx0) * .62, y], fill=SIMAK_LINE, width=lw)
-            star(d, lx0 + (lx1 - lx0) * .80, y, S * .038, SIMAK_STAR)
-        else:
-            d.line([lx0, y, lx0 + (lx1 - lx0) * (hw / .34), y], fill=SIMAK_LINE, width=lw)
+    cx, cy = S * .5, S * .52
+    r = S * .125
+    # bridge between the barrels, with the focus wheel
+    d.rounded_rectangle([cx - S * .06, cy - r * .95, cx + S * .06, cy - r * .35],
+                        radius=S * .02, fill=SIMAK_CARD)
+    d.ellipse([cx - S * .032, cy - r * .78, cx + S * .032, cy - r * .78 + S * .064], fill=SIMAK_LINE)
+    # barrels with tapered tops
+    for sx in (-1, 1):
+        bx = cx + sx * S * .135
+        d.rounded_rectangle([bx - r * .55, cy - r * 1.65, bx + r * .55, cy - r * .5],
+                            radius=S * .025, fill=SIMAK_CARD)
+        d.ellipse([bx - r, cy - r, bx + r, cy + r], fill=SIMAK_CARD)
+        d.ellipse([bx - r * .72, cy - r * .72, bx + r * .72, cy + r * .72], fill=SIMAK_LINE)
+        d.ellipse([bx - r * .42, cy - r * .42, bx + r * .42, cy + r * .42], fill=SIMAK_BG)
+    # star glint in the right lens
+    star(d, cx + S * .135, cy, S * .058, SIMAK_STAR)
     return art
 
 
