@@ -1,6 +1,6 @@
 name: patuh consistency gate
 
-# Family consistency checks from irvan-putra/patuh, required for tengok.
+# Family consistency checks from irvan-putra/patuh, required for simak.
 # On every push to main: source gate on the exact pushed tree. A manual
 # dispatch also builds a debug APK and byte-checks the packaged icon
 # pre-publish, and verifies the currently live release (post-publish mode).
