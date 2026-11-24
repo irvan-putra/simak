@@ -73,3 +73,7 @@ Both are committed; CI fails if either drifts from `schedule.json`.
 - Stars, notes and reminder toggles survive restarts; finished reminders do
   not come back after firing.
 - No tracker, no analytics, no ads.
+
+---
+
+Built with AI assistance (Instinct and others). Not everything has been reviewed by Irvan.
