@@ -76,4 +76,4 @@ Both are committed; CI fails if either drifts from `schedule.json`.
 
 ---
 
-Built with AI assistance (Instinct and others). Not everything has been reviewed by Irvan. No Fenrir usage in this repo.
+Built with AI assistance (Instinct and others). Not everything has been reviewed by Irvan.
